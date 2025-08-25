@@ -2,7 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 from results.controller import results_bp
 
-def create_app():
+def create_app(**kwargs):   # accept kwargs for gunicorn compatibility
     app = Flask(__name__)
     CORS(app)
 
