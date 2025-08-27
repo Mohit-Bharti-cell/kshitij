@@ -108,12 +108,12 @@ def get_all_results():
                 "maxScore": sb.get("max_score"),
                 "percentage": sb.get("percentage"),
                 "status": sb.get("status"),
-                "tab swithces": sb.get("tab_switches"),
-                "text selections": sb.get("text_selections"),
+                "tab_switches": sb.get("tab_switches"),
+                "text_selections": sb.get("text_selections"),
                 "copies": sb.get("copies"),
                 "pastes": sb.get("pastes"),
-                "right clicks": sb.get("right_clicks"),
-                "face not visible": sb.get("face_not_visible"),
+                "right_clicks": sb.get("right_clicks"),
+                "face_not_visible": sb.get("face_not_visible"),
                 "inactivites": sb.get("inactivities"),
             })
 
