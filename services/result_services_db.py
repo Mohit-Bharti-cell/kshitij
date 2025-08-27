@@ -5,27 +5,25 @@ from pymongo import MongoClient
 from supabase import create_client
 from bson import ObjectId
 
-# Load environment variables
 load_dotenv()
 
-# Supabase setup
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 if not SUPABASE_URL or not SUPABASE_KEY:
     raise RuntimeError("SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not set in environment")
+
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# MongoDB setup
 MONGO_URL = os.getenv("MONGO_URL") or os.getenv("MONGO_URI")
 MONGO_DB = os.getenv("MONGO_DB") or "recruiter-platform"
 if not MONGO_URL:
     raise RuntimeError("MONGO_URL/MONGO_URI not set in environment")
+
 mongo_client = MongoClient(MONGO_URL)
 db = mongo_client[MONGO_DB]
 candidates_col = db["candidates"]
 jds_col = db["jds"]
 
-# Helper functions
 def _normalize_email(e: str) -> str:
     return (e or "").strip().lower()
 
@@ -38,7 +36,6 @@ def _latest_result(rows):
             return datetime.min
     return sorted(rows, key=keyfn)[-1] if rows else None
 
-# Main function to fetch results
 def get_all_results():
     all_cands = list(candidates_col.find({}, {"_id": 0}))
     by_jd = {}
@@ -73,6 +70,7 @@ def get_all_results():
                 unique_cands.append(c)
 
         total_candidates = len(unique_cands)
+
         emails = sorted(seen)
         supa_rows = []
         if emails:
@@ -110,6 +108,13 @@ def get_all_results():
                 "maxScore": sb.get("max_score"),
                 "percentage": sb.get("percentage"),
                 "status": sb.get("status"),
+                "tab swithces": sb.get("tab_switches"),
+                "text selections": sb.get("text_selections"),
+                "copies": sb.get("copies"),
+                "pastes": sb.get("pastes"),
+                "right clicks": sb.get("right_clicks"),
+                "face not visible": sb.get("face_not_visible"),
+                "inactivites": sb.get("inactivities"),
             })
 
         out.append({
@@ -121,7 +126,6 @@ def get_all_results():
 
     return out
 
-# Optional: test locally
 if __name__ == "__main__":
     import json
     print(json.dumps(get_all_results(), indent=2, ensure_ascii=False))
